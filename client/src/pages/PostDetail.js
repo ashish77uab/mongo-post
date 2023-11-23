@@ -181,7 +181,7 @@ const PostDetail = () => {
               <div className="relative h-[500px] w-full overflow-hidden rounded-md">
                 <img
                   className="w-full h-full object-cover hoverable-img"
-                  src={`${process.env.REACT_APP_DEV_API}${post.selectedFile}`}
+                  src={`${process.env.REACT_APP_PROD_API}${post.selectedFile}`}
                   alt=""
                 />
               </div>
@@ -209,7 +209,7 @@ const PostDetail = () => {
                           className="w-full rounded-full h-full object-cover"
                           src={
                             comment?.user?.profileImage
-                              ? `${process.env.REACT_APP_DEV_API}${comment?.user?.profileImage}`
+                              ? `${process.env.REACT_APP_PROD_API}${comment?.user?.profileImage}`
                               : "/images/user.png"
                           }
                           alt=""
@@ -313,7 +313,7 @@ const PostDetail = () => {
                                       className="w-full rounded-full h-full object-cover"
                                       src={
                                         reply.user.profileImage
-                                          ? `${process.env.REACT_APP_DEV_API}${reply.user.profileImage}`
+                                          ? `${process.env.REACT_APP_PROD_API}${reply.user.profileImage}`
                                           : "/images/user.png"
                                       }
                                       alt=""
@@ -443,7 +443,7 @@ const PostDetail = () => {
                         <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden">
                           <img
                             className="w-full h-full object-cover"
-                            src={`${process.env.REACT_APP_DEV_API}${post?.selectedFile}`}
+                            src={`${process.env.REACT_APP_PROD_API}${post?.selectedFile}`}
                             alt=""
                           />
                         </div>

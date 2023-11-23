@@ -150,7 +150,7 @@ const AddPost = () => {
                 <div className="w-28 h-28 relative">
                   <img
                     className=" object-contain rounded-md"
-                    src={`${process.env.REACT_APP_DEV_API}${form.selectedFile}`}
+                    src={`${process.env.REACT_APP_PROD_API}${form.selectedFile}`}
                     alt=""
                   />
                   {id && (

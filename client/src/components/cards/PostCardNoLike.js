@@ -16,7 +16,7 @@ const PostCardNoLike = ({ post }) => {
       >
         <img
           className="w-full h-full object-cover hoverable-img"
-          src={`${process.env.REACT_APP_DEV_API}${post.selectedFile}`}
+          src={`${process.env.REACT_APP_PROD_API}${post.selectedFile}`}
           alt=""
         />
       </div>
