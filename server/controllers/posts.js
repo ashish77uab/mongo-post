@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import Post from "../models/Post.js";
+import FavouritePost from "../models/FavouritePost.js";
 
 export const getPosts = async (req, res) => {
   const { search, tag, page } = req.query;

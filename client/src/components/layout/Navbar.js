@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { reactIcons } from "../../utils/icons";
 import { setLogout } from "../../redux/features/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { imageRender } from "../../utils/helpers";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const Navbar = () => {
                       className="w-10 h-10 object-cover rounded-full"
                       src={
                         user.profileImage
-                          ? `${process.env.REACT_APP_PROD_API}${user.profileImage}`
+                          ? imageRender(user.profileImage)
                           : "/images/user.png"
                       }
                       alt=""

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import Spinner from "../components/loaders/Spinner";
 import TextInput from "../components/forms/TextInput";
 import TextArea from "../components/forms/TextArea";
+import { imageRender } from "../utils/helpers";
 const initialState = {
   title: "",
   message: "",
@@ -98,7 +99,9 @@ const AddPost = () => {
         console.log(error, "error");
       }
     };
-    getPost();
+    if (id) {
+      getPost();
+    }
   }, [id]);
   return (
     <>
@@ -150,7 +153,7 @@ const AddPost = () => {
                 <div className="w-28 h-28 relative">
                   <img
                     className=" object-contain rounded-md"
-                    src={`${process.env.REACT_APP_PROD_API}${form.selectedFile}`}
+                    src={imageRender(form?.selectedFile)}
                     alt=""
                   />
                   {id && (

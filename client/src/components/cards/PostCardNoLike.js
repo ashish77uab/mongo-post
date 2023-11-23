@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { imageRender } from "../../utils/helpers";
 
 const PostCardNoLike = ({ post }) => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const PostCardNoLike = ({ post }) => {
       >
         <img
           className="w-full h-full object-cover hoverable-img"
-          src={`${process.env.REACT_APP_PROD_API}${post.selectedFile}`}
+          src={imageRender(post?.selectedFile)}
           alt=""
         />
       </div>

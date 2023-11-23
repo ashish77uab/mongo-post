@@ -1,1 +1,2 @@
 REACT_APP_DEV_API=http://localhost:5000/
+REACT_APP_PROD_API=http://example.com/

@@ -15,6 +15,7 @@ import { reactIcons } from "../utils/icons";
 import { setUser, updateUser } from "../redux/features/authSlice";
 import Spinner from "../components/loaders/Spinner";
 import AddDetails from "../components/modals/AddDetails";
+import { imageRender } from "../utils/helpers";
 
 const Profile = () => {
   const [isAddDetailsModalOpen, setIsAddDetailsModalOpen] = useState(false);
@@ -132,7 +133,7 @@ const Profile = () => {
               {user?.coverImage ? (
                 <img
                   className=" hoverable-img w-full"
-                  src={`${process.env.REACT_APP_PROD_API}${user?.coverImage}`}
+                  src={imageRender(user?.coverImage)}
                   alt="cover"
                 />
               ) : (
@@ -161,7 +162,7 @@ const Profile = () => {
                 className="w-full h-full rounded-full object-cover"
                 src={
                   user?.profileImage
-                    ? `${process.env.REACT_APP_PROD_API}${user?.profileImage}`
+                    ? imageRender(user?.profileImage)
                     : "/images/user.png"
                 }
                 alt=""
@@ -234,7 +235,7 @@ const Profile = () => {
                         className="w-full rounded-full h-full object-cover"
                         src={
                           friend?.profileImage
-                            ? `${process.env.REACT_APP_PROD_API}${friend?.profileImage}`
+                            ? imageRender(friend?.profileImage)
                             : "/images/user.png"
                         }
                         alt=""
@@ -265,12 +266,12 @@ const Profile = () => {
                     <div className="flex-shrink-0 w-16 h-16  p-[1px] bg-amber-500 rounded-full overflow-hidden shadow-card">
                       <img
                         className="w-full rounded-full h-full object-cover"
+                        alt=""
                         src={
                           friend?.profileImage
-                            ? `${process.env.REACT_APP_PROD_API}${friend?.profileImage}`
+                            ? imageRender(friend?.profileImage)
                             : "/images/user.png"
                         }
-                        alt=""
                       />
                     </div>
                     <div className="flex-1">

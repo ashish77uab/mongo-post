@@ -7,6 +7,7 @@ import { addToFavourite, postLike, removeFromFavourites } from "../../api/api";
 import ToastMsg from "../toast/ToastMsg";
 import { toast } from "react-toastify";
 import DeleteConfirmation from "../modals/DeleteConfirmation";
+import { imageRender } from "../../utils/helpers";
 
 const PostCard = ({ post, type, favourite }) => {
   const [toggle, setToggle] = useState(favourite || post?.isFavourite);
@@ -76,7 +77,7 @@ const PostCard = ({ post, type, favourite }) => {
         >
           <img
             className="w-full h-full object-cover hoverable-img"
-            src={`${process.env.REACT_APP_PROD_API}${post?.selectedFile}`}
+            src={imageRender(post?.selectedFile)}
             alt=""
           />
           {type === "my" && (
