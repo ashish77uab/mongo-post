@@ -4,7 +4,7 @@ import fs from "fs";
 import User from "../models/User.js";
 import Token from "../models/Token.js";
 import crypto from "crypto";
-import { sendEmail } from "../utils/SendEmail.js";
+import { sendEmail } from "../SendEmail.js";
 import Follower from "../models/Follower.js";
 
 export const signin = async (req, res) => {
@@ -46,8 +46,8 @@ export const uploadProfileImage = async (req, res) => {
   }
 
   try {
-    if(fileName){
-        fs.unlinkSync("./uploads/" + fileName);
+    if (fileName) {
+      fs.unlinkSync("./uploads/" + fileName);
     }
     let imageToSet;
     if (type === "cover") {
@@ -126,34 +126,34 @@ export const getUser = async (req, res) => {
   const userData = await User.findById(user.id, { password: 0 }).populate({
     path: "followers",
     populate: {
-        path: "followingUser",
-        select: 'fullName email description profileImage'
-      },
+      path: "followingUser",
+      select: "fullName email description profileImage",
+    },
   });
-  
+
   res.status(200).json(userData);
 };
 export const getUsers = async (req, res) => {
-    const user = req.user;
-    const userData = await User.find({_id : {$nin : user.id}}).populate({
-        path: "followers",
-      });
-      const MyData = await User.findById({_id : user.id}).populate({
-        path: "followers",
-      });
-      const followerArr=MyData.followers.map((item)=>item.followingUser.toString())
-      const newData=userData.map((item)=>{
-        if(followerArr.includes(item._id.toString())){
-            return {...item._doc,isFollowed:true}
-        }else{
-            return {...item._doc,isFollowed:false}
-        }
-      })
+  const user = req.user;
+  const userData = await User.find({ _id: { $nin: user.id } }).populate({
+    path: "followers",
+  });
+  const MyData = await User.findById({ _id: user.id }).populate({
+    path: "followers",
+  });
+  const followerArr = MyData.followers.map((item) =>
+    item.followingUser.toString()
+  );
+  const newData = userData.map((item) => {
+    if (followerArr.includes(item._id.toString())) {
+      return { ...item._doc, isFollowed: true };
+    } else {
+      return { ...item._doc, isFollowed: false };
+    }
+  });
 
-      
-    
-    res.status(200).json(newData);
-  };
+  res.status(200).json(newData);
+};
 export const addUserDetails = async (req, res) => {
   const user = req.user;
   const { mobile, address, description } = req.body;
@@ -200,14 +200,14 @@ export const resetPasswordRequestController = async (req, res) => {
       name: user.fullName,
       link: link,
     },
-    "../utils/template/requestResetPassword.handlebars"
+    "/views/template/requestResetPassword.ejs"
   );
   return res.json({ link });
 };
 
 export const resetPasswordController = async (req, res) => {
   const { userId, token, password } = req.body;
-  console.log(userId,token,password);
+  console.log(userId, token, password);
 
   let passwordResetToken = await Token.findOne({ userId });
 
@@ -237,7 +237,7 @@ export const resetPasswordController = async (req, res) => {
     {
       name: user.fullName,
     },
-    "./template/resetPassword.handlebars"
+    "/views/template/resetPassword.ejs"
   );
 
   await passwordResetToken.deleteOne();
@@ -245,23 +245,23 @@ export const resetPasswordController = async (req, res) => {
   return res.json({ message: "Password reset was successful" });
 };
 export const addFollowers = async (req, res) => {
-    const {followingUser}=req.body;
-    const user=req.user;
-    const follower = new Follower({ followingUser,userId:user.id });
-    try {
-      await follower.save();
-      res.status(201).json(follower);
-    } catch (error) {
-      res.status(409).json({ message: error.message });
-    }
-  };
-  export const removeFollowers = async (req, res) => {
-    const {followingUser}=req.body;
-    const user=req.user;
-    try {
-        await Follower.deleteOne({ followingUser,userId:user.id });
-      res.status(201).json({message:'Deleted Successfully'});
-    } catch (error) {
-      res.status(409).json({ message: error.message });
-    }
-  };
+  const { followingUser } = req.body;
+  const user = req.user;
+  const follower = new Follower({ followingUser, userId: user.id });
+  try {
+    await follower.save();
+    res.status(201).json(follower);
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+};
+export const removeFollowers = async (req, res) => {
+  const { followingUser } = req.body;
+  const user = req.user;
+  try {
+    await Follower.deleteOne({ followingUser, userId: user.id });
+    res.status(201).json({ message: "Deleted Successfully" });
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+};
