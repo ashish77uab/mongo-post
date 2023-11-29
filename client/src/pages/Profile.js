@@ -228,69 +228,79 @@ const Profile = () => {
             <div>
               <h4 className="heading-4 text-center mb-2">My Friends</h4>
               <ul className="space-y-2 bg-white shadow-card border border-zinc-200 py-6 px-4 rounded-md">
-                {user?.followers.map(({ followingUser: friend }) => (
-                  <li className="py-3 duration-150 cursor-pointer px-4 gap-6 rounded-md border border-zinc-200 bg-gray-50   flex hover:bg-amber-100">
-                    <div className="flex-shrink-0 w-16 h-16  p-[1px] bg-amber-500 rounded-full overflow-hidden shadow-card">
-                      <img
-                        className="w-full rounded-full h-full object-cover"
-                        src={
-                          friend?.profileImage
-                            ? imageRender(friend?.profileImage)
-                            : "/images/user.png"
-                        }
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h6 className="heading-6">{friend?.fullName}</h6>
-                      <p className="text-muted leading-[1] mb-2">
-                        {friend?.email}
-                      </p>
-                      <button
-                        onClick={(e) => handleRemoveFollower(e, friend._id)}
-                        className="btn-red btn-sm"
-                      >
-                        Remove
-                      </button>
-                    </div>
+                {user?.followers?.length > 0 ? (
+                  user?.followers.map(({ followingUser: friend }) => (
+                    <li className="py-3 duration-150 cursor-pointer px-4 gap-6 rounded-md border border-zinc-200 bg-gray-50   flex hover:bg-amber-100">
+                      <div className="flex-shrink-0 w-16 h-16  p-[1px] bg-amber-500 rounded-full overflow-hidden shadow-card">
+                        <img
+                          className="w-full rounded-full h-full object-cover"
+                          src={
+                            friend?.profileImage
+                              ? imageRender(friend?.profileImage)
+                              : "/images/user.png"
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h6 className="heading-6">{friend?.fullName}</h6>
+                        <p className="text-muted leading-[1] mb-2">
+                          {friend?.email}
+                        </p>
+                        <button
+                          onClick={(e) => handleRemoveFollower(e, friend._id)}
+                          className="btn-red btn-sm"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-center font-semibold">
+                    You have no friends
                   </li>
-                ))}
+                )}
               </ul>
             </div>
             <div className=""></div>
             <div>
               <h4 className="heading-4 text-center mb-2">Add Friends</h4>
               <ul className="space-y-2 bg-white shadow-card border border-zinc-200 py-6 px-4 rounded-md">
-                {allUsers.map((friend) => (
-                  <li className="py-3 duration-150 cursor-pointer px-4 gap-6 rounded-md border border-zinc-200 bg-gray-50   flex hover:bg-amber-100">
-                    <div className="flex-shrink-0 w-16 h-16  p-[1px] bg-amber-500 rounded-full overflow-hidden shadow-card">
-                      <img
-                        className="w-full rounded-full h-full object-cover"
-                        alt=""
-                        src={
-                          friend?.profileImage
-                            ? imageRender(friend?.profileImage)
-                            : "/images/user.png"
-                        }
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h6 className="heading-6">{friend?.fullName}</h6>
-                      <div className="flex">
-                        {friend.isFollowed ? (
-                          <p className="text-muted">Your friend</p>
-                        ) : (
-                          <button
-                            onClick={(e) => handleAddFollower(e, friend._id)}
-                            className="btn-primary btn-sm"
-                          >
-                            Add Friend
-                          </button>
-                        )}
+                {allUsers?.length > 0 ? (
+                  allUsers.map((friend) => (
+                    <li className="py-3 duration-150 cursor-pointer px-4 gap-6 rounded-md border border-zinc-200 bg-gray-50   flex hover:bg-amber-100">
+                      <div className="flex-shrink-0 w-16 h-16  p-[1px] bg-amber-500 rounded-full overflow-hidden shadow-card">
+                        <img
+                          className="w-full rounded-full h-full object-cover"
+                          alt=""
+                          src={
+                            friend?.profileImage
+                              ? imageRender(friend?.profileImage)
+                              : "/images/user.png"
+                          }
+                        />
                       </div>
-                    </div>
-                  </li>
-                ))}
+                      <div className="flex-1">
+                        <h6 className="heading-6">{friend?.fullName}</h6>
+                        <div className="flex">
+                          {friend.isFollowed ? (
+                            <p className="text-muted">Your friend</p>
+                          ) : (
+                            <button
+                              onClick={(e) => handleAddFollower(e, friend._id)}
+                              className="btn-primary btn-sm"
+                            >
+                              Add Friend
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-center font-semibold">No data</li>
+                )}
               </ul>
             </div>
           </div>

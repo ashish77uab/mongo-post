@@ -12,18 +12,20 @@ import { setCategoriesOfPost } from "../redux/features/postSlice";
 import { reactIcons } from "../utils/icons";
 import { Listbox, Transition } from "@headlessui/react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from "./../components/loaders/Spinner";
 const Posts = () => {
   const [searchText, setSearchText] = useState("");
-  const searchValue = useDeferredValue(searchText);
+  const [searchValue, setSearchValue] = useState("");
   const categories = useSelector((state) => state.post.categories);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   const [pages, setPages] = useState({ currentPage: 1, numberOfPages: 1 });
   const [page, setPage] = useState(pages.currentPage);
   const getPostsData = async (page, searchValue, selectedCategory) => {
-    setIsSkeletonLoading(true)
+    !isSkeletonLoading && setIsLoading(true);
     try {
       const res = await getPosts(page, searchValue, selectedCategory);
       const { status, data } = res;
@@ -38,8 +40,9 @@ const Posts = () => {
       }
     } catch (error) {
       console.log(error, "error");
-    }finally{
-        setIsSkeletonLoading(false)
+    } finally {
+      setIsSkeletonLoading(false);
+      setIsLoading(false);
     }
   };
   const getUserData = async () => {
@@ -82,8 +85,16 @@ const Posts = () => {
       setPage((prev) => prev + 1);
     }
   };
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+    setTimeout(() => {
+      setPosts([]);
+      setSearchValue(e.target.value);
+    }, 1500);
+  };
   return (
     <>
+      {isLoading && <Spinner />}
       <section className=" py-12  text-black px-8">
         <div className="container">
           <header className="flex gap-4">
@@ -92,15 +103,18 @@ const Posts = () => {
                 type="text"
                 placeholder="search by title"
                 value={searchText}
-                onChange={(e) => {setSearchText(e.target.value);setPosts([])}}
+                onChange={handleSearch}
                 className="border-zinc-200 bg-white input-field max-w-xl w-full"
               />
             </form>
             <div className="w-[250px]">
-              <Listbox value={selectedCategory} onChange={(value)=>{
-                setSelectedCategory(value)
-                setPosts([])
-                }}>
+              <Listbox
+                value={selectedCategory}
+                onChange={(value) => {
+                  setSelectedCategory(value);
+                  setPosts([]);
+                }}
+              >
                 <div className="relative">
                   <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 h-10 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                     <span className="block truncate">
@@ -186,7 +200,7 @@ const Posts = () => {
             hasMore={page < pages.numberOfPages}
           >
             <div className="grid grid-cols-4 gap-8 mt-10">
-              {isSkeletonLoading ? (
+              {isSkeletonLoading || isLoading ? (
                 Array(8)
                   .fill(2)
                   .map((_item, index) => <PostCardSkeleton key={index} />)

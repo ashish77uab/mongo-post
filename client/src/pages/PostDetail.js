@@ -170,6 +170,7 @@ const PostDetail = () => {
       toast.error(<ToastMsg title={error?.response?.data?.message} />);
     }
   };
+  console.log(user, "user");
 
   return (
     <>
@@ -223,21 +224,25 @@ const PostDetail = () => {
                           {moment(comment.createdAt).format("D MMM, YYYY")}
                         </p>
                         <div className="flex gap-2 items-center my-1 ">
-                          <button
-                            onClick={() => {
-                              setCommentId(comment._id);
-                              setCommentText(comment.commentText);
-                            }}
-                            className="font-medium text-gray-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-zinc-200"
-                          >
-                            <span className="">{reactIcons.edit}</span> Edit
-                          </button>
-                          <button
-                            onClick={() => setCommentReplyId(comment._id)}
-                            className="font-medium text-gray-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-zinc-200"
-                          >
-                            <span className="">{reactIcons.reply}</span> Reply
-                          </button>
+                          {comment?.userId === user?._id && (
+                            <button
+                              onClick={() => {
+                                setCommentId(comment._id);
+                                setCommentText(comment.commentText);
+                              }}
+                              className="font-medium text-gray-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-zinc-200"
+                            >
+                              <span className="">{reactIcons.edit}</span> Edit
+                            </button>
+                          )}
+                          {comment?.userId !== user?._id && (
+                            <button
+                              onClick={() => setCommentReplyId(comment._id)}
+                              className="font-medium text-gray-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-zinc-200"
+                            >
+                              <span className="">{reactIcons.reply}</span> Reply
+                            </button>
+                          )}
                           {commentId && (
                             <button
                               onClick={() => {
@@ -304,109 +309,116 @@ const PostDetail = () => {
                             </div>
                           )}
                         </div>
-                        <div className="my-2 ">
-                          <ul className="py-2 my-2 pr-4   ml-10">
-                            {comment?.commentReply?.map((reply) => (
-                              <>
-                                <li key={reply._id} className="py-3 flex gap-6">
-                                  <div className="flex-shrink-0 w-10 h-10  p-[1px] bg-orange-500 rounded-full overflow-hidden shadow-card">
-                                    <img
-                                      className="w-full rounded-full h-full object-cover"
-                                      src={
-                                        reply?.user?.profileImage
-                                          ? imageRender(
-                                              reply?.user?.profileImage
-                                            )
-                                          : "/images/user.png"
-                                      }
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="flex-1">
-                                    <h6 className="heading-6">
-                                      {reply.user.fullName}
-                                    </h6>
-                                    <p>{reply.commentText}</p>
-                                    <p className="text-xs text-gray-600 mt-1">
-                                      {moment(reply.createdAt).format(
-                                        "D MMM, YYYY"
-                                      )}
-                                    </p>
+                        {comment?.commentReply?.length > 0 && (
+                          <div className="my-2 ">
+                            <ul className="py-2 my-2 pr-4   ml-10">
+                              {comment?.commentReply?.map((reply) => (
+                                <>
+                                  <li
+                                    key={reply._id}
+                                    className="py-3 flex gap-6"
+                                  >
+                                    <div className="flex-shrink-0 w-10 h-10  p-[1px] bg-orange-500 rounded-full overflow-hidden shadow-card">
+                                      <img
+                                        className="w-full rounded-full h-full object-cover"
+                                        src={
+                                          reply?.user?.profileImage
+                                            ? imageRender(
+                                                reply?.user?.profileImage
+                                              )
+                                            : "/images/user.png"
+                                        }
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="flex-1">
+                                      <h6 className="heading-6">
+                                        {reply.user.fullName}
+                                      </h6>
+                                      <p>{reply.commentText}</p>
+                                      <p className="text-xs text-gray-600 mt-1">
+                                        {moment(reply.createdAt).format(
+                                          "D MMM, YYYY"
+                                        )}
+                                      </p>
 
-                                    <div className="flex gap-2 items-center my-1 ">
-                                      <button
-                                        onClick={() => {
-                                          setCommentReplyId(reply._id);
-                                          setCommentReplyText(
-                                            reply.commentText
-                                          );
-                                        }}
-                                        className="font-medium text-gray-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-zinc-200"
-                                      >
-                                        <span className="">
-                                          {reactIcons.edit}
-                                        </span>{" "}
-                                        Edit
-                                      </button>
-                                      {commentReplyId === reply._id && (
-                                        <button
-                                          onClick={() => {
-                                            setCommentReplyId(null);
-                                            setCommentReplyText("");
-                                          }}
-                                          className="font-medium text-red-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-red-200"
-                                        >
-                                          <span className="">
-                                            {reactIcons.close}
-                                          </span>{" "}
-                                          close
-                                        </button>
-                                      )}
-                                    </div>
-                                    <div className="my-2 ">
-                                      {commentReplyId === reply._id && (
-                                        <div className="">
+                                      <div className="flex gap-2 items-center my-1 ">
+                                        {reply.user?.id === user._id && (
+                                          <button
+                                            onClick={() => {
+                                              setCommentReplyId(reply._id);
+                                              setCommentReplyText(
+                                                reply.commentText
+                                              );
+                                            }}
+                                            className="font-medium text-gray-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-zinc-200"
+                                          >
+                                            <span className="">
+                                              {reactIcons.edit}
+                                            </span>{" "}
+                                            Edit
+                                          </button>
+                                        )}
+                                        {commentReplyId === reply._id && (
+                                          <button
+                                            onClick={() => {
+                                              setCommentReplyId(null);
+                                              setCommentReplyText("");
+                                            }}
+                                            className="font-medium text-red-600 px-2 py-1 flex items-center gap-1 text-sm rounded-md hover:bg-zinc-300 bg-red-200"
+                                          >
+                                            <span className="">
+                                              {reactIcons.close}
+                                            </span>{" "}
+                                            close
+                                          </button>
+                                        )}
+                                      </div>
+                                      <div className="my-2 ">
+                                        {commentReplyId === reply._id && (
                                           <div className="">
-                                            <form
-                                              onSubmit={
-                                                commentReplyId
-                                                  ? handleUpdateReplyComment
-                                                  : (e) =>
-                                                      handleCommentReply(
-                                                        e,
-                                                        comment._id
-                                                      )
-                                              }
-                                              action=""
-                                              className="w-full"
-                                            >
-                                              <TextArea
-                                                value={commentReplyText}
-                                                onChange={(e) =>
-                                                  setCommentReplyText(
-                                                    e.target.value
-                                                  )
+                                            <div className="">
+                                              <form
+                                                onSubmit={
+                                                  commentReplyId
+                                                    ? handleUpdateReplyComment
+                                                    : (e) =>
+                                                        handleCommentReply(
+                                                          e,
+                                                          comment._id
+                                                        )
                                                 }
-                                                placeholder="Add Reply"
-                                              />
-                                              <button
-                                                type="submit"
-                                                disabled={!commentReplyText}
-                                                className="btn-primary"
+                                                action=""
+                                                className="w-full"
                                               >
-                                                Submit
-                                              </button>
-                                            </form>
+                                                <TextArea
+                                                  value={commentReplyText}
+                                                  onChange={(e) =>
+                                                    setCommentReplyText(
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  placeholder="Add Reply"
+                                                />
+                                                <button
+                                                  type="submit"
+                                                  disabled={!commentReplyText}
+                                                  className="btn-primary"
+                                                >
+                                                  Submit
+                                                </button>
+                                              </form>
+                                            </div>
                                           </div>
-                                        </div>
-                                      )}
+                                        )}
+                                      </div>
                                     </div>
-                                  </div>
-                                </li>
-                              </>
-                            ))}
-                          </ul>
-                        </div>
+                                  </li>
+                                </>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     </li>
                   ))}

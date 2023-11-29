@@ -20,6 +20,7 @@ import { setUser } from "./redux/features/authSlice";
 import ToastMsg from "./components/toast/ToastMsg";
 import { useEffect } from "react";
 import MainLayout from "./components/layout/MainLayout";
+import ProtectedRoutes from "./ProtectedRoutes";
 function App() {
   const dispatch = useDispatch();
   const getUserData = async () => {
@@ -45,7 +46,14 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainLayout />}>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoutes>
+                <MainLayout />
+              </ProtectedRoutes>
+            }
+          >
             <Route index element={<Posts />} />
             <Route path="add" element={<AddPost />} />
             <Route path="edit/:id" element={<AddPost />} />
